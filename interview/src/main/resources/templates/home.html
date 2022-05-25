@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>home</title>
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+<script>
+
+
+</script>
+</head>
+<body>
+
+<h1 th:text="'使用者：' + ${userName}"></h1>
+
+<table>
+  <tr>
+    <th>單號</th>
+    <th>類型</th>
+    <th>嚴重性</th>
+    <th>優先級</th>
+    <th>是否解決</th>    
+  </tr>
+  <tr th:each="lst: ${ticketLst}">
+    <td th:text="${lst.no}" />
+    <td th:text="${lst.type}" />
+    <td th:text="${lst.serious}" />
+    <td th:text="${lst.priority}" />
+    <td th:text="${lst.solved}" />
+    <td>
+    	<a href="#" th:href="@{/updatePage(no = ${lst.no}, userName = ${userName})}">修改</a>
+    	<a href="#" th:href="@{/deleteTicket(no = ${lst.no}, userName = ${userName})}">刪除</a>
+    </td>
+  </tr> 
+</table>
+<div><a href="#" th:href="@{/insertPage(userName = ${userName})}">新增</a></div>
+</body>
+</html>

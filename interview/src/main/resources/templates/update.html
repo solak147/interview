@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+    
+    <script>
+   		function checkForm(){
+   			
+   			if(document.getElementById("userName").innerHTML == "使用者：admin"){
+   				
+   				return true; 
+   				
+   			}else if(document.getElementById("userName").innerHTML == "使用者：RD"){
+   	 			
+				if(document.getElementById("type").value != "bug" ||  document.getElementById("type").value != "Feature Request"){	
+					
+					alert("RD only can resolve a bug and a Feature Request");	
+   	   				return false; 	   		
+   	   			}
+   			
+				return true; 	 
+				
+   			}else if(document.getElementById("userName").innerHTML == "使用者：QA"){
+   				
+   				if(document.getElementById("type").value == "bug" || document.getElementById("type").value == "Test Case"){
+   					
+   					if(document.getElementById("type").value == "bug" && document.getElementById("solved").value == "已解決"){
+   						alert("QA only can edit a bug but can't resolve");
+   						return false;
+   					}
+   					
+	   				return true;
+	   			
+   				}else{
+   					alert("QA only can edit a Test Case and a bug");
+	   				return false 
+	   			}
+				
+   			}else if(document.getElementById("userName").innerHTML == "使用者：PM"){
+   				
+   				if(document.getElementById("type").value == "Feature Request"){
+   					
+   					if( document.getElementById("solved").value == "已解決"){
+   						alert("PM only can edit a Feature Request but can't resolve");
+   	   	   				return false;
+   					}
+   	   				
+   					return true;
+   	   			}else{
+	   	   			alert("PM only can edit a Feature Request");
+	   				return false 
+   	   			}
+   			} 			
+
+   		}
+    </script>
+    
+</head>
+<body>
+
+<h1 th:text="'使用者：' + ${userName}" id="userName"></h1>
+
+
+<form action="#" th:action="@{/update(userName=${userName})}" th:object="${ticket}" method="post" onsubmit="return checkForm();">
+
+	<table>
+		<tr>
+		    <th>單號</th>
+		    <th>類型</th>
+		    <th>嚴重性</th>
+		    <th>優先級</th>
+		    <th>是否解決</th>    
+		</tr>
+		<tr>
+			<td> 
+				<div th:text="*{no}"></div>
+				<input type="hidden" th:field="*{no}"/>
+			</td>
+			<td> 
+				<div th:if="${userName == 'RD'}" th:text="*{type}"></div>
+				<input th:if="${userName == 'RD'}" type="hidden" th:field="*{type}" id="type"/>
+				<select th:unless="${userName == 'RD'}" th:field="*{type}" id="type">
+					<option th:value="'Bug'" th:text="'Bug'"></option>
+				    <option th:value="'Test Case'" th:text="'Test Case'"></option>
+				    <option th:value="'Feature Request'" th:text="'Feature Request'"></option>
+				</select>
+			</td>
+			<td> 
+				<div th:if="${userName == 'RD'}" th:text="*{serious}"></div>
+				<input th:if="${userName == 'RD'}" type="hidden" th:field="*{serious}"/>
+				<select th:unless="${userName == 'RD'}" th:field="*{serious}">
+					<option th:value="'high'" th:text="'high'"></option>
+				    <option th:value="'medium'" th:text="'medium'"></option>
+				    <option th:value="'low'" th:text="'low'"></option>
+				</select>
+			</td>
+			<td>
+				<div th:if="${userName == 'RD'}" th:text="*{priority}"></div>
+				<input th:if="${userName == 'RD'}" type="hidden" th:field="*{priority}"/>
+				<select th:unless="${userName == 'RD'}" th:field="*{priority}">
+					<option th:value="'high'" th:text="'high'"></option>
+				    <option th:value="'medium'" th:text="'medium'"></option>
+				    <option th:value="'low'" th:text="'low'"></option>
+				</select>
+			</td>
+			<td> 
+				<select th:field="*{solved}" id="solved">
+					<option th:value="'已解決'" th:text="'已解決'"></option>
+				    <option th:value="'未解決'" th:text="'未解決'"></option>
+				</select>
+			</td>	
+			<td>  <input type="submit" value="修改"/></td>
+			
+		</tr>
+	</table>
+</form>
+</body>
+</html>

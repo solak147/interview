@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+    
+    <script>
+   		function checkForm(){
+   			
+   			if(document.getElementById("userName").innerHTML == "使用者：admin"){
+   				return true;
+   			}
+   			
+   			if(document.getElementById("userName").innerHTML == "使用者：RD"){
+   				alert("RD can't create");
+   				return false;
+   			}
+   			
+   			if(document.getElementById("userName").innerHTML == "使用者：QA" ){
+   				if(document.getElementById("type").value != "bug" && document.getElementById("type").value != "Test Case"){
+   	   				alert("QA only can create a bug and Test Case");
+					return false;
+   	   			}
+   				
+   			}
+   			
+   			if(document.getElementById("userName").innerHTML == "使用者：PM"){
+   				if(document.getElementById("type").value != "Feature Request"){
+   	   				alert("PM only can create a Feature Request");
+					return false;
+   	   			}
+   			}  			
+   			
+   			return true;
+   		}
+    </script>
+    
+</head>
+<body>
+
+<h1 th:text="'使用者：' + ${userName}" id="userName"></h1>
+
+
+<form action="#" th:action="@{/insert(userName=${userName})}" th:object="${ticket}" method="post" onsubmit="return checkForm();">
+
+	<table>
+		<tr>
+		    <th>類型</th>
+		    <th>嚴重性</th>
+		    <th>優先級</th>
+		    <th>是否解決</th>    
+		</tr>
+		<tr>
+			<td> 
+				<select th:field="*{type}" id="type">
+					<option th:value="'Bug'" th:text="'Bug'"></option>
+				    <option th:value="'Test Case'" th:text="'Test Case'"></option>
+				    <option th:value="'Feature Request'" th:text="'Feature Request'"></option>
+				</select>
+			</td>
+			<td> 
+				<select th:field="*{serious}">
+					<option th:value="'high'" th:text="'high'"></option>
+				    <option th:value="'medium'" th:text="'medium'"></option>
+				    <option th:value="'low'" th:text="'low'"></option>
+				</select>
+			</td>
+			<td>
+				<select th:field="*{priority}">
+					<option th:value="'high'" th:text="'high'"></option>
+				    <option th:value="'medium'" th:text="'medium'"></option>
+				    <option th:value="'low'" th:text="'low'"></option>
+				</select>
+			</td>
+			<td> 
+				<select th:field="*{solved}">
+					<option th:value="'已解決'" th:text="'已解決'"></option>
+				    <option th:value="'未解決'" th:text="'未解決'"></option>
+				</select>
+			</td>	
+			<td><input type="submit" value="新增"/></td>
+			
+		</tr>
+	</table>
+</form>
+</body>
+</html>
